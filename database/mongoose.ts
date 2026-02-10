@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 // load env ONCE, globally
-dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
