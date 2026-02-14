@@ -36,7 +36,7 @@ const WatchlistButton = ({
         onClick={handleClick}
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          // xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill={added ? "#FACC15" : "none"}
           stroke="#FACC15"
@@ -57,7 +57,7 @@ const WatchlistButton = ({
     <button className={`watchlist-btn ${added ? "watchlist-remove" : ""}`} onClick={handleClick}>
       {showTrashIcon && added ? (
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          // xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}

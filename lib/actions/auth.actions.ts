@@ -4,34 +4,88 @@ import {auth} from "@/lib/better-auth/auth";
 import {inngest} from "@/lib/inngest/client";
 import {headers} from "next/headers";
 
-export const signUpWithEmail = async ({ email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry }: SignUpFormData) => {
-    try {
-        const response = await auth.api.signUpEmail({ body: { email, password, name: fullName } })
+// export const signUpWithEmail = async ({ email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry }: SignUpFormData) => {
+//     try {
+//         const response = await auth.api.signUpEmail({ body: { email, password, name: fullName } })
 
-        if(response) {
-            await inngest.send({
-                name: 'app/user.created',
-                data: { email, name: fullName, country, investmentGoals, riskTolerance, preferredIndustry }
-            })
-        }
+//         if(response) {
+//             await inngest.send({
+//                 name: 'app/user.created',
+//                 data: { email, name: fullName, country, investmentGoals, riskTolerance, preferredIndustry }
+//             })
+//         }
 
-        return { success: true, data: response }
-    } catch (e) {
-        console.log('Sign up failed', e)
-        return { success: false, error: 'Sign up failed' }
+//         return { success: true, data: response }
+//     } catch (e) {
+//         console.log('Sign up failed', e)
+//         return { success: false, error: 'Sign up failed' }
+//     }
+// }
+
+export const signUpWithEmail = async ({
+  email,
+  password,
+  fullName,
+  country,
+  investmentGoals,
+  riskTolerance,
+  preferredIndustry,
+}: SignUpFormData) => {
+  try {
+    const response = await auth.api.signUpEmail({
+      headers: await headers(),   // ✅ IMPORTANT FIX
+      body: { email, password, name: fullName },
+    });
+
+    if (response) {
+      await inngest.send({
+        name: "app/user.created",
+        data: {
+          email,
+          name: fullName,
+          country,
+          investmentGoals,
+          riskTolerance,
+          preferredIndustry,
+        },
+      });
     }
-}
+
+    return { success: true, data: response };
+  } catch (e) {
+    console.log("Sign up failed", e);
+    return { success: false, error: "Sign up failed" };
+  }
+};
+
+
+// export const signInWithEmail = async ({ email, password }: SignInFormData) => {
+//     try {
+//         const response = await auth.api.signInEmail({ body: { email, password } })
+
+//         return { success: true, data: response }
+//     } catch (e) {
+//         console.log('Sign in failed', e)
+//         return { success: false, error: 'Sign in failed' }
+//     }
+// }
 
 export const signInWithEmail = async ({ email, password }: SignInFormData) => {
-    try {
-        const response = await auth.api.signInEmail({ body: { email, password } })
+  try {
+    const response = await auth.api.signInEmail({
+      headers: await headers(),   // ✅ add this
+      body: { email, password },
+    });
 
-        return { success: true, data: response }
-    } catch (e) {
-        console.log('Sign in failed', e)
-        return { success: false, error: 'Sign in failed' }
-    }
-}
+    return { success: true, data: response };
+  } catch (e) {
+    console.log("Sign in failed", e);
+    console.log(" JUST TO CHECK Sign up failed", e instanceof Error ? e.message : e);
+    return { success: false, error: "Sign in failed" };
+  }
+};
+
+
 
 export const signOut = async () => {
     try {

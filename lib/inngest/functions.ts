@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {inngest} from "@/lib/inngest/client";
 import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT} from "@/lib/inngest/prompts";
 import {sendNewsSummaryEmail, sendWelcomeEmail} from "@/lib/nodemailer";
@@ -59,7 +60,7 @@ export const sendDailyNewsSummary = inngest.createFunction(
 
         // Step #2: For each user, get watchlist symbols -> fetch news (fallback to general)
         const results = await step.run('fetch-user-news', async  () => {
-            const perUser: Array<{ user: { email: string; [k: string]: any }; articles: any[] }> = [];
+            const perUser: Array<{ user: { email: string; [k: string]: unknown }; articles: any[] }> = [];
             for (const user of users as Array<{ email: string; [k: string]: any }>) {
                 try {
                     const symbols = await getWatchlistSymbolsByEmail(user.email);
